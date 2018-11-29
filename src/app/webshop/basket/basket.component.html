@@ -1,0 +1,95 @@
+<div *ngFor="let ci of cart">
+  <div class="row" *ngIf="ci">
+    <h2>Your cart</h2>
+    <hr/>
+    <div class="col-md-12">
+      <div style="margin-top:40px;">
+        <form>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Your Name</label>
+            <input type="text" (change)="updateCartDetails(ci);" name="basketName" class="form-control" [(ngModel)]="ci.basketName">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Pin</label>
+            <input type="text" (change)="updateCartDetails(ci);" name="pincode" class="form-control" [(ngModel)]="ci.pincode">
+          </div>
+        </form>
+      </div>
+      <table class="table">
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price per unit</th>
+          <th>Line Total</th>
+          <th>Delete</th>
+        </tr>
+
+        <tr *ngFor="let item of ci.products">
+          <td>{{item.title}}</td>
+          <td>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <button (click)="item.quantity = item.quantity - 1; updateCartDetails(ci);" [disabled]="item.quantity < 2" class="btn btn-primary">-</button>
+              </div>
+              <input type="text" style="width:25px;" class="form-control" (change)="updateCartDetails(ci);" [(ngModel)]="item.quantity">
+              <div class="input-group-append">
+                <button (click)="item.quantity = item.quantity + 1;updateCartDetails(ci);" class="btn btn-primary">+</button>
+              </div>
+            </div>
+          </td>
+          <td>$ {{item.price}}</td>
+          <td>$ {{item.quantity * item.price}}</td>
+          <td><button class="btn btn-danger" (click)="deleteFromCart(index, ci)" > <i class="fa fa-trash"></i></button></td>          
+        </tr>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            <td>{{ci.totalQuantity}}</td>
+            <td></td>
+            <td>$ {{ci.totalAmount}}</td>
+            <td></td>
+          </tr>
+        </tfoot>
+
+      </table>
+    </div>
+  </div>
+  <div style="margin-top:40px;" class="row" *ngIf="ci">
+    <h2>Add products</h2>
+    <hr/>
+    <div class="col-md-12">
+      <table class="table">
+
+          <tr *ngFor="let item of newProducts; index as i">
+              <td>
+                <input type="text" class="form-control" (change)="getProductPrice(item);" [(ngModel)]="item.title" />
+                <!-- <select class="form-control" (change)="getProductPrice(item);" >
+                  <option *ngFor="let p of allProducts;" value="{{p.title}}">{{p.title}}</option>
+                </select> -->
+              </td>
+              <td>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button (click)="item.quantity = item.quantity - 1;" [disabled]="item.quantity < 2" class="btn btn-primary">-</button>
+                  </div>
+                  <input type="text" style="width:25px;" class="form-control" [(ngModel)]="item.quantity">
+                  <div class="input-group-append">
+                    <button (click)="item.quantity = item.quantity + 1;" class="btn btn-primary">+</button>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <button (click)="removeProduct(i);" class="btn btn-lg btn-secondary"> Remove</button>
+              </td>
+              <td>
+                  <button (click)="addAnother();" class="btn btn-lg btn-primary"> Add Another</button>                
+              </td>
+            </tr>
+            <tr>
+              <button (click)="addProductstoCart(ci);" class="btn btn-lg btn-success">Update Cart</button>
+            </tr>
+      </table>
+    
+    </div>
+  </div>
+</div>
